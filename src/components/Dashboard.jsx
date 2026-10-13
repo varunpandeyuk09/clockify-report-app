@@ -2,8 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import Icon from './Icon.jsx'
 import DateBar from './DateBar.jsx'
 import ReportCard from './ReportCard.jsx'
+import UpdatesSheet from './UpdatesSheet.jsx'
 import { generateReport } from '../services/generate.js'
 import { shiftISO, todayISO } from '../utils/dateUtils.js'
+import { UPDATES } from '../updates.js'
+
+const LAST_SEEN_KEY = 'clockify-last-seen-update'
 
 function initialDate(settings) {
   const today = todayISO(settings.timezone)
@@ -16,6 +20,27 @@ export default function Dashboard({ settings, onOpenSettings, theme, onToggleThe
   const [status, setStatus] = useState('loading')
   const [report, setReport] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const [updatesOpen, setUpdatesOpen] = useState(false)
+  const [lastSeenId, setLastSeenId] = useState(() => {
+    try {
+      return localStorage.getItem(LAST_SEEN_KEY) || ''
+    } catch {
+      return ''
+    }
+  })
+
+  const hasUnseen = UPDATES.length > 0 && UPDATES[0].id !== lastSeenId
+
+  const openUpdates = () => {
+    setUpdatesOpen(true)
+    const latest = UPDATES[0]?.id || ''
+    setLastSeenId(latest)
+    try {
+      localStorage.setItem(LAST_SEEN_KEY, latest)
+    } catch {
+      // private mode — badge will reappear next time
+    }
+  }
 
   const load = useCallback(
     async (date) => {
@@ -55,6 +80,15 @@ export default function Dashboard({ settings, onOpenSettings, theme, onToggleThe
           <span className="status-chip">
             <span className="dot" /> Connected
           </span>
+          <button
+            type="button"
+            className="icon-btn bell-btn"
+            onClick={openUpdates}
+            aria-label="What's new"
+          >
+            <Icon name="bell" size={18} />
+            {hasUnseen && <span className="badge-dot" />}
+          </button>
           <button
             type="button"
             className="icon-btn"
@@ -129,6 +163,8 @@ export default function Dashboard({ settings, onOpenSettings, theme, onToggleThe
 
         {status === 'ready' && report && <ReportCard report={report} />}
       </section>
+
+      {updatesOpen && <UpdatesSheet onClose={() => setUpdatesOpen(false)} />}
     </div>
   )
 }

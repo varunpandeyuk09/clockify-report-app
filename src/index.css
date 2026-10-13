@@ -822,17 +822,9 @@ h3 {
   gap: 8px;
 }
 
+/* temporary: connected status chip hidden */
 .status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-  background: rgba(52, 211, 153, 0.1);
-  border: 1px solid rgba(52, 211, 153, 0.28);
-  padding: 6px 11px;
-  border-radius: 999px;
+  display: none;
 }
 
 .status-chip .dot {
@@ -842,6 +834,160 @@ h3 {
   background: var(--accent);
   box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.22);
   animation: pulse 2s ease infinite;
+}
+
+/* ---------- notification bell + updates sheet ---------- */
+.bell-btn {
+  position: relative;
+}
+
+.badge-dot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--danger);
+  border: 2px solid var(--bg);
+  animation: pulse 2s ease infinite;
+}
+
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 16, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: 80;
+  animation: fade-in 0.2s ease;
+}
+
+.update-sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: min(520px, 100%);
+  height: min(50vh, 300px);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.4);
+  z-index: 81;
+  padding-bottom: env(safe-area-inset-bottom);
+  animation: sheet-up 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sheet-grip {
+  width: 42px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--hairline-strong);
+  margin: 9px auto 4px;
+  flex: none;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 16px 10px;
+  border-bottom: 1px solid var(--hairline);
+  flex: none;
+}
+
+.sheet-head h3 {
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+
+.sheet-head p {
+  margin: 2px 0 0;
+  font-size: 12px;
+}
+
+.update-list {
+  list-style: none;
+  margin: 0;
+  padding: 10px 14px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.update-row {
+  display: flex;
+  gap: 10px;
+}
+
+.update-icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 10px;
+  color: var(--accent);
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  margin-top: 1px;
+}
+
+.update-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.update-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.update-top strong {
+  font-size: 13.2px;
+  line-height: 1.35;
+}
+
+.update-top time {
+  flex: none;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.update-items {
+  list-style: none;
+  margin: 5px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.update-items li {
+  position: relative;
+  padding-left: 12px;
+  font-size: 12.2px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.update-items li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-2);
 }
 
 /* ---------- date bar ---------- */
@@ -1249,6 +1395,15 @@ h3 {
   }
   to {
     opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translate(-50%, 100%);
+  }
+  to {
     transform: translate(-50%, 0);
   }
 }
