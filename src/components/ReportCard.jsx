@@ -5,9 +5,11 @@ import { buildMessage, formatHoursPretty, secondsToHours } from '../utils/report
 export default function ReportCard({ report }) {
   const maxSeconds = Math.max(...report.tasks.map((t) => t.seconds), 1)
   const message = buildMessage(report, report.timezone)
-  const plainList = report.tasks
-    .map((t) => `${t.name}: ${secondsToHours(t.seconds)} hours`)
-    .join('\n')
+  const plainList = [
+    `Date: ${report.dateLong}`,
+    ...report.tasks.map((t) => `${t.name}: ${secondsToHours(t.seconds)} hours`),
+    `Total: ${report.totalHours} hours`,
+  ].join('\n')
 
   return (
     <article className="report">
