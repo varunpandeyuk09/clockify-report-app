@@ -411,8 +411,8 @@ h3 {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 10px;
+  gap: 7px;
+  padding: 10px 8px;
   border-radius: 14px;
   border: 1px solid var(--border);
   background: var(--card);
@@ -436,11 +436,11 @@ h3 {
 .step-dot {
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   flex: none;
   border-radius: 50%;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 800;
   background: var(--chip);
   border: 1px solid var(--border);
@@ -459,24 +459,44 @@ h3 {
 }
 
 .step-meta {
-  display: none;
+  display: flex;
   flex-direction: column;
   min-width: 0;
+  overflow: hidden;
 }
 
 .step-meta strong {
-  font-size: 12.5px;
+  font-size: 11px;
   color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .step-meta small {
+  display: none;
   font-size: 11px;
   color: var(--muted);
 }
 
 @media (min-width: 420px) {
-  .step-meta {
-    display: flex;
+  .step-btn {
+    gap: 9px;
+    padding: 10px;
+  }
+
+  .step-dot {
+    width: 26px;
+    height: 26px;
+    font-size: 12.5px;
+  }
+
+  .step-meta strong {
+    font-size: 12.5px;
+  }
+
+  .step-meta small {
+    display: block;
   }
 }
 
