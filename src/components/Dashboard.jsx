@@ -15,11 +15,12 @@ function initialDate(settings) {
   return shiftISO(today, -1)
 }
 
-export default function Dashboard({ settings, onOpenSettings, theme, onToggleTheme }) {
+export default function Dashboard({ settings, onOpenSettings, onSettingsChange, theme, onToggleTheme }) {
   const [dateISO, setDateISO] = useState(() => initialDate(settings))
   const [status, setStatus] = useState('loading')
   const [report, setReport] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const [format, setFormat] = useState(() => settings.reportFormat || 'whatsapp')
   const [updatesOpen, setUpdatesOpen] = useState(false)
   const [lastSeenId, setLastSeenId] = useState(() => {
     try {
@@ -161,7 +162,16 @@ export default function Dashboard({ settings, onOpenSettings, theme, onToggleThe
           </div>
         )}
 
-        {status === 'ready' && report && <ReportCard report={report} />}
+        {status === 'ready' && report && (
+          <ReportCard
+            report={report}
+            format={format}
+            onFormatChange={(f) => {
+              setFormat(f)
+              onSettingsChange?.({ reportFormat: f })
+            }}
+          />
+        )}
       </section>
 
       {updatesOpen && <UpdatesSheet onClose={() => setUpdatesOpen(false)} />}

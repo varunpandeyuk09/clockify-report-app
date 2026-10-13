@@ -1,15 +1,16 @@
 import Icon from './Icon.jsx'
 import CopyButton from './CopyButton.jsx'
-import { buildMessage, formatHoursPretty, secondsToHours } from '../utils/report.js'
+import {
+  FORMATS,
+  formatHoursPretty,
+  formatReport,
+  secondsToHours,
+} from '../utils/report.js'
 
-export default function ReportCard({ report }) {
+export default function ReportCard({ report, format = 'whatsapp', onFormatChange }) {
   const maxSeconds = Math.max(...report.tasks.map((t) => t.seconds), 1)
-  const message = buildMessage(report, report.timezone)
-  const plainList = [
-    `Date: ${report.dateLong}`,
-    ...report.tasks.map((t) => `${t.name}: ${secondsToHours(t.seconds)} hours`),
-    `Total: ${report.totalHours} hours`,
-  ].join('\n')
+  const activeFormat = FORMATS.find((f) => f.id === format) || FORMATS[0]
+  const message = formatReport(report, format, report.timezone)
 
   return (
     <article className="report">
@@ -80,9 +81,26 @@ export default function ReportCard({ report }) {
         )}
       </div>
 
-      <div className="report-actions">
-        <CopyButton text={message} label="Copy formatted report" />
-        <CopyButton text={plainList} label="Copy plain list" variant="soft" />
+      <div className="format-block">
+        <div className="format-row">
+          <span className="label">Copy format</span>
+          <div className="chips">
+            {FORMATS.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                className={`chip ${format === f.id ? 'is-active' : ''}`}
+                onClick={() => onFormatChange?.(f.id)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <pre className="format-preview">{message}</pre>
+        <div className="report-actions">
+          <CopyButton text={message} label={`Copy ${activeFormat.label} format`} />
+        </div>
       </div>
     </article>
   )

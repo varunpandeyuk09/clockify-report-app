@@ -87,6 +87,17 @@ export default function App() {
     setSettings(next)
   }
 
+  const updateSettings = (patch) => {
+    if (!settings) return
+    const next = { ...settings, ...patch }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+    } catch {
+      // storage full / private mode — change stays for this session
+    }
+    setSettings(next)
+  }
+
   const dismissInstall = () => {
     sessionStorage.setItem('install-dismissed', '1')
     setInstallDismissed(true)
@@ -132,6 +143,7 @@ export default function App() {
         <Dashboard
           settings={settings}
           onOpenSettings={() => setEditing(true)}
+          onSettingsChange={updateSettings}
           theme={theme}
           onToggleTheme={toggleTheme}
         />

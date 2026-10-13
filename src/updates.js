@@ -2,6 +2,17 @@
 // id unique honi chahiye — badge dot isi se hide hota hai (seen).
 export const UPDATES = [
   {
+    id: 'v2026-10-13-formats',
+    date: '2026-10-13',
+    icon: 'copy',
+    title: 'Report format options',
+    items: [
+      'Report card me format choose karo: WhatsApp, Plain, Compact, Table.',
+      'Copy se pehle live preview bhi dikh jata hai.',
+      'Default format Settings (Preferences) me bhi set kar sakte ho.',
+    ],
+  },
+  {
     id: 'v2026-10-13-notifications',
     date: '2026-10-13',
     icon: 'bell',

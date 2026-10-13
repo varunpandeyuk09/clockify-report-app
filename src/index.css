@@ -1320,6 +1320,46 @@ h3 {
   }
 }
 
+/* ---------- format picker + preview ---------- */
+.format-block {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+}
+
+.format-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.format-preview {
+  margin: 0 0 12px;
+  padding: 12px 13px;
+  border-radius: 13px;
+  background: var(--input-bg);
+  border: 1px solid var(--hairline);
+  font-family: 'SFMono-Regular', ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11.8px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 170px;
+  overflow: auto;
+  color: var(--text);
+}
+
+.format-block .report-actions {
+  margin-top: 0;
+}
+
+.seg-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
 .copy-btn.copied {
   color: #05261c;
   background: linear-gradient(135deg, var(--accent), #2dd4bf);

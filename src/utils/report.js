@@ -119,3 +119,54 @@ export function buildMessage(report, timezone = 'Asia/Kolkata') {
   lines.push('🌸 _Have a wonderful & productive day!_ 🚀')
   return lines.join('\n')
 }
+
+export const FORMATS = [
+  { id: 'whatsapp', label: 'WhatsApp' },
+  { id: 'plain', label: 'Plain' },
+  { id: 'compact', label: 'Compact' },
+  { id: 'table', label: 'Table' },
+]
+
+export function formatPlain(report) {
+  const lines = [`Date: ${report.dateLong}`]
+  for (const task of report.tasks) {
+    lines.push(`${task.name}: ${secondsToHours(task.seconds)} hours`)
+  }
+  lines.push(`Total: ${report.totalHours} hours`)
+  return lines.join('\n')
+}
+
+export function formatCompact(report) {
+  const lines = [`${report.dateShort} · ${report.totalHours}h total`]
+  for (const task of report.tasks) {
+    const name = task.name.replace(/\s+/g, ' ')
+    lines.push(`• ${name} — ${secondsToHours(task.seconds)}h`)
+  }
+  return lines.join('\n')
+}
+
+export function formatTable(report) {
+  const clean = (s) => String(s).replace(/\s+/g, ' ')
+  const nameW = Math.min(
+    42,
+    Math.max(4, 'Task'.length, ...report.tasks.map((t) => clean(t.name).length)),
+  )
+  const row = (left, right) => {
+    const name = clean(left)
+    const truncated = name.length > nameW ? `${name.slice(0, nameW - 1)}…` : name
+    return `${truncated.padEnd(nameW)}  ${right.padStart(7)}`
+  }
+  const out = [row('Task', 'Hours'), '-'.repeat(nameW + 9)]
+  for (const task of report.tasks) {
+    out.push(row(task.name, secondsToHours(task.seconds)))
+  }
+  out.push(row('Total', report.totalHours))
+  return out.join('\n')
+}
+
+export function formatReport(report, format, timezone) {
+  if (format === 'plain') return formatPlain(report)
+  if (format === 'compact') return formatCompact(report)
+  if (format === 'table') return formatTable(report)
+  return buildMessage(report, timezone)
+}

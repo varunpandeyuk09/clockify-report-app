@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Icon from './Icon.jsx'
 import { autoDetect, getMe } from '../services/clockify.js'
+import { FORMATS } from '../utils/report.js'
 
 const TIMEZONES = [
   'Asia/Kolkata',
@@ -20,6 +21,7 @@ const DEFAULT_FORM = {
   defaultDay: 'today',
   workdaysOnly: true,
   theme: 'dark',
+  reportFormat: 'whatsapp',
 }
 
 const STEPS = [
@@ -350,6 +352,25 @@ export default function SetupWizard({ initial, canCancel, onCancel, onSave }) {
               >
                 <span className="knob" />
               </button>
+            </div>
+
+            <div className="field">
+              <span className="label">Report format</span>
+              <div className="seg seg-4" role="tablist">
+                {FORMATS.map((f) => (
+                  <button
+                    key={f.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={form.reportFormat === f.id}
+                    className={`seg-btn ${form.reportFormat === f.id ? 'is-active' : ''}`}
+                    onClick={() => set({ reportFormat: f.id })}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+              <span className="hint muted">Copy karne par isi format me output aayega — report card me baad me bhi switch kar sakte ho.</span>
             </div>
 
             <div className="field">
