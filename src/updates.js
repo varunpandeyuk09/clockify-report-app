@@ -2,6 +2,16 @@
 // id unique honi chahiye — badge dot isi se hide hota hai (seen).
 export const UPDATES = [
   {
+    id: 'v2026-10-13-copy-share',
+    date: '2026-10-13',
+    icon: 'copy',
+    title: 'Copy & native share',
+    items: [
+      'Copy button ab report ko clipboard me copy karta hi hai — saath me Android/iOS ka native share sheet bhi khul jata hai.',
+      'WhatsApp, Slack, email — jo app chaho wahi se bhejo.',
+    ],
+  },
+  {
     id: 'v2026-10-13-formats',
     date: '2026-10-13',
     icon: 'copy',
