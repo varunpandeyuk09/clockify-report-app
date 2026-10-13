@@ -868,7 +868,7 @@ h3 {
   bottom: 0;
   transform: translateX(-50%);
   width: min(520px, 100%);
-  height: min(50vh, 300px);
+  height: 90dvh;
   display: flex;
   flex-direction: column;
   background: var(--bg-elev);
