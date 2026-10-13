@@ -11,7 +11,7 @@ function initialDate(settings) {
   return shiftISO(today, -1)
 }
 
-export default function Dashboard({ settings, onOpenSettings }) {
+export default function Dashboard({ settings, onOpenSettings, theme, onToggleTheme }) {
   const [dateISO, setDateISO] = useState(() => initialDate(settings))
   const [status, setStatus] = useState('loading')
   const [report, setReport] = useState(null)
@@ -55,6 +55,14 @@ export default function Dashboard({ settings, onOpenSettings }) {
           <span className="status-chip">
             <span className="dot" /> Connected
           </span>
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={onToggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+          >
+            <Icon name={theme === 'dark' ? 'sun' : 'moon'} size={18} />
+          </button>
           <button type="button" className="icon-btn" onClick={onOpenSettings} aria-label="Open settings">
             <Icon name="gear" size={19} />
           </button>

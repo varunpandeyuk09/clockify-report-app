@@ -19,6 +19,7 @@ const DEFAULT_FORM = {
   displayName: '',
   defaultDay: 'yesterday',
   workdaysOnly: true,
+  theme: 'dark',
 }
 
 const STEPS = [
@@ -186,8 +187,8 @@ export default function SetupWizard({ initial, canCancel, onCancel, onSave }) {
               <Icon name="key" size={17} /> Clockify API key
             </h2>
             <p className="muted">
-              Clockify → Profile → Settings → API → <strong>Generate API Key</strong>. Key sirf aapke
-              browser me rehti hai, kahi server par nahi jaati.
+              Key sirf aapke browser me rehti hai, kahi server par nahi jaati. Neeche steps dekho
+              kaise generate karni hai.
             </p>
 
             <label className="field">
@@ -221,8 +222,10 @@ export default function SetupWizard({ initial, canCancel, onCancel, onSave }) {
               <div>
                 <strong>API key kaise milegi?</strong>
                 <p className="muted">
-                  Clockify web app me login karo → profile icon → Settings → API → Generate API Key →
-                  copy karke yahan paste karo.
+                  Clockify me <strong>profile icon</strong> pe click → <strong>Preferences</strong>{' '}
+                  → <strong>Advanced</strong> tab → <strong>Manage API keys</strong> →{' '}
+                  <strong>Generate new</strong> CTA → <strong>Generate</strong> → key copy karke
+                  yahan paste karo.
                 </p>
               </div>
             </div>
@@ -347,6 +350,31 @@ export default function SetupWizard({ initial, canCancel, onCancel, onSave }) {
               >
                 <span className="knob" />
               </button>
+            </div>
+
+            <div className="field">
+              <span className="label">Theme</span>
+              <div className="seg" role="tablist">
+                {[
+                  { id: 'dark', label: '🌙 Dark' },
+                  { id: 'light', label: '☀️ Light' },
+                ].map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={form.theme === opt.id}
+                    className={`seg-btn ${form.theme === opt.id ? 'is-active' : ''}`}
+                    onClick={() => {
+                      set({ theme: opt.id })
+                      // live preview while choosing; saved only on Complete setup
+                      document.documentElement.dataset.theme = opt.id
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="info-card">

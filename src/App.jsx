@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SetupWizard from './components/SetupWizard.jsx'
 import Dashboard from './components/Dashboard.jsx'
 import { useInstallPrompt, usePWAUpdates } from './pwa.js'
@@ -37,6 +37,23 @@ export default function App() {
 
   const onDashboard = Boolean(settings) && !editing
   const showInstall = canInstall && !installDismissed && onDashboard
+  const theme = settings?.theme === 'light' ? 'light' : 'dark'
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+  }, [theme])
+
+  const toggleTheme = () => {
+    if (!settings) return
+    const nextTheme = theme === 'dark' ? 'light' : 'dark'
+    const next = { ...settings, theme: nextTheme }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+    } catch {
+      // storage full / private mode — theme still applies this session
+    }
+    setSettings(next)
+  }
 
   const dismissInstall = () => {
     sessionStorage.setItem('install-dismissed', '1')
@@ -73,11 +90,19 @@ export default function App() {
         <SetupWizard
           initial={settings}
           canCancel={Boolean(settings)}
-          onCancel={() => setEditing(false)}
+          onCancel={() => {
+            document.documentElement.dataset.theme = theme
+            setEditing(false)
+          }}
           onSave={saveSettings}
         />
       ) : (
-        <Dashboard settings={settings} onOpenSettings={() => setEditing(true)} />
+        <Dashboard
+          settings={settings}
+          onOpenSettings={() => setEditing(true)}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+        />
       )}
 
       {needRefresh && (
