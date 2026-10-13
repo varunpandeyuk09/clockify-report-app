@@ -5,12 +5,43 @@ import { useInstallPrompt, usePWAUpdates } from './pwa.js'
 
 const STORAGE_KEY = 'clockify-settings'
 
+// Bump this on every rollout that should reset saved preferences.
+// v2: default report day changed to Today.
+const SETTINGS_VERSION = 2
+
+const DEFAULT_PREFS = {
+  defaultDay: 'today',
+  workdaysOnly: true,
+  theme: 'dark',
+  displayName: '',
+}
+
+// API/account cheezein hamesha preserve hoti hain; sirf preferences reset hoti hain.
+function migrateSettings(parsed) {
+  if (!parsed || typeof parsed !== 'object') return null
+  if ((parsed.version || 1) >= SETTINGS_VERSION) return parsed
+  return {
+    version: SETTINGS_VERSION,
+    apiKey: parsed.apiKey || '',
+    workspaceId: parsed.workspaceId || '',
+    userId: parsed.userId || '',
+    timezone: parsed.timezone || 'Asia/Kolkata',
+    ...DEFAULT_PREFS,
+  }
+}
+
 function loadSettings() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw)
-    return parsed && typeof parsed === 'object' ? parsed : null
+    const migrated = migrateSettings(parsed)
+    if (!migrated) return null
+    if ((parsed.version || 1) < SETTINGS_VERSION) {
+      // write back once so migration runs a single time per device
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated))
+    }
+    return migrated
   } catch {
     return null
   }
@@ -26,12 +57,13 @@ export default function App() {
   )
 
   const saveSettings = (next) => {
+    const withVersion = { version: SETTINGS_VERSION, ...next }
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(withVersion))
     } catch {
       // storage full / private mode — setup still continues for this session
     }
-    setSettings(next)
+    setSettings(withVersion)
     setEditing(false)
   }
 
