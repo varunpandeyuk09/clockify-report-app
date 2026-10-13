@@ -17,7 +17,7 @@ const DEFAULT_FORM = {
   userId: '',
   timezone: 'Asia/Kolkata',
   displayName: '',
-  defaultDay: 'yesterday',
+  defaultDay: 'today',
   workdaysOnly: true,
   theme: 'dark',
 }
